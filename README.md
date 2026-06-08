@@ -15,6 +15,7 @@ Only real jitter measuring equipment can give an accurate measurement of jitter.
 
 Test points on the PlayStation 2 mainboard:
 -------------------------------------------
+```text
 A) RS232C:
 	TXD (JL610)
 	RXD (JL611)
@@ -45,6 +46,7 @@ D) EEPROM Reset Mode on Dragon Models (50k+):
 	- Unshort the resistor legs
 	- Run pmap
 	To verify that the EEPROM wasnt read on boot in Menu 4 (Show Ident Data), the CFC should display 00000000
+```
 
 About Optical Block (OP) types:
 -------------------------------
@@ -71,8 +73,10 @@ Real-Time Clock (RTC) IC:
 -------------------------
 
 There are two types of RTC ICs on the F-chassis:
+```text
 IC405	RS5C384AE2
 IC416	BU9861FV-WE2
+```
 
 Importance of the button battery:
 ---------------------------------
@@ -194,6 +198,7 @@ Target values are listed in the Adjustment thresholds section below.
 
 Adjustment thresholds/targets:
 ------------------------------
+```text
 CD:
 	a.	CD DET:				SONY OP 600-1600, SANYO OP 750-1800 /  SONY OP: 660-1760, SANYO OP: 825-1980
 	b.	FE Loop gain (K13):		0x10 - 0x60
@@ -214,9 +219,11 @@ DVD-DL:
 	f.	(L1) Jitter (256):		0 - 0x2300 (DEX: 0x1200) / G/H/I-chassis: 0 - 0x4C00 (DEX: 0x2D00)
 Disc Detect CD/DVD Ratio:			>= 1.80 / G/H/I-chassis: >=1.73
 EEPROM Checksum:				0
+```
 
 Supported chassis models:
 -------------------------
+```text
 A-chassis:	SCPH-10000/SCPH-15000
 B-chassis:	SCPH-30001
 C-chassis:	SCPH-30001/2/3/4
@@ -229,13 +236,17 @@ A-chassis TOOL:	DTL-T10000(H)
 B-chassis DEX:	DTL-H30001/2
 D-chassis DEX:	DTL-H30000
 H-chassis DEX:	DTL-H50000/1/2/6/8/9
+```
 
 Supported MD versions:
+----------------------
+```text
 MD1.36 testmode.193 for CXP101064-605R, testmode.194 for CXP101064-602R
 MD1.38 testmode.6 for CXP102064-003R
 MD1.38 testmode.19 for CXP102064-005R
 MD1.39 (CXP103049-xxx F/G-chassis)
 MD1.40 (CXR706080-xxx H/I-chassis)
+```
 
 ID management (ID_MANAGEMENT build flag)
 -----------------------------------------

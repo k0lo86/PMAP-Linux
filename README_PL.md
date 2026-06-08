@@ -15,6 +15,7 @@ Tylko rzeczywisty sprzęt do pomiaru jittera (jitter meter) może dać dokładny
 
 Punkty testowe na płycie głównej PlayStation 2:
 -------------------------------------------
+```text
 A) RS232C:
 	TXD (JL610)
 	RXD (JL611)
@@ -45,6 +46,7 @@ D) Tryb resetowania EEPROM w modelach Dragon (50k+):
 	- Rozewrzyj nóżki rezystora
 	- Uruchom pmap
 	Aby zweryfikować, czy EEPROM nie został odczytany przy starcie, w menu 4 (Show Ident Data) wartość CFC powinna wynosić 00000000.
+```
 
 O typach bloków optycznych (OP):
 -------------------------------
@@ -71,8 +73,10 @@ Układ zegara czasu rzeczywistego (RTC IC):
 -----------------------------------------
 
 Na płytach głównych chassis F występują dwa typy układów RTC:
+```text
 IC405	RS5C384AE2
 IC416	BU9861FV-WE2
+```
 
 Znaczenie baterii pastylkowej:
 ---------------------------------
@@ -193,6 +197,7 @@ Docelowe wartości są wymienione w sekcji "Wartości progowe/docelowe" poniżej
 
 Wartości progowe/docelowe regulacji:
 ------------------------------
+```text
 CD:
 	a.	CD DET:				SONY OP 600-1600, SANYO OP 750-1800 / SONY OP: 660-1760, SANYO OP: 825-1980
 	b.	Wzmocnienie pętli FE (K13):	0x10 - 0x60
@@ -213,9 +218,11 @@ DVD-DL:
 	f.	(L1) Jitter (256):		0 - 0x2300 (DEX: 0x1200) / chassis G/H/I: 0 - 0x4C00 (DEX: 0x2D00)
 Stosunek Disc Detect CD/DVD:			>= 1.80 / chassis G/H/I: >=1.73
 Suma kontrolna EEPROM:				0
+```
 
 Obsługiwane modele chassis:
 -------------------------
+```text
 Chassis A:	SCPH-10000/SCPH-15000
 Chassis B:	SCPH-30001
 Chassis C:	SCPH-30001/2/3/4
@@ -228,13 +235,17 @@ Chassis A TOOL:	DTL-T10000(H)
 Chassis B DEX:	DTL-H30001/2
 Chassis D DEX:	DTL-H30000
 Chassis H DEX:	DTL-H50000/1/2/6/8/9
+```
 
 Obsługiwane wersje MD:
+----------------------
+```text
 MD1.36 testmode.193 dla CXP101064-605R, testmode.194 dla CXP101064-602R
 MD1.38 testmode.6 dla CXP102064-003R
 MD1.38 testmode.19 dla CXP102064-005R
 MD1.39 (CXP103049-xxx F/G-chassis)
 MD1.40 (CXR706080-xxx H/I-chassis)
+```
 
 Zarządzanie ID (flaga kompilacji ID_MANAGEMENT)
 -----------------------------------------------
