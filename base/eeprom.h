@@ -29,6 +29,9 @@ int EEPROMGetTVSystem(void);
 
 int EEPROMCanClearOSD2InitBit(int chassis);
 
+int EEPROMReadConsoleID(u8 *ConsoleID);
+int EEPROMWriteConsoleID(const u8 *ConsoleID);
+
 enum TV_SYSTEM
 {
     TV_SYSTEM_NTSC = 0,

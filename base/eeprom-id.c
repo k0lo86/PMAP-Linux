@@ -134,7 +134,15 @@ int MechaInitMechacon(int model, int IsDex)
     tm = localtime(&TimeNow);
     // Format: RRYYMMDDHHMMSSrrrr, where R = MagicGate region, Y = Year (from 2000), M = Month (1-12), D = Day of month (1-31), H = Hour (0-23), M = minute (0-59), S = second (0-59), r = random number (first 4 digits from the right).
     // The time and date format is made with Ctime::Format %y%m%d%H%M%S
-    snprintf(data, 19, "%02x%02d%02d%02d%02d%02d%02d%04d", region->region, tm->tm_year - 100, tm->tm_mon + 1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec, rand() % 10000);
+    int year = (tm->tm_year >= 100) ? (tm->tm_year - 100) % 100 : 0;
+    int mon  = (tm->tm_mon >= 0 && tm->tm_mon < 12) ? tm->tm_mon + 1 : 1;
+    int mday = (tm->tm_mday >= 1 && tm->tm_mday <= 31) ? tm->tm_mday : 1;
+    int hour = (tm->tm_hour >= 0 && tm->tm_hour < 24) ? tm->tm_hour : 0;
+    int min  = (tm->tm_min >= 0 && tm->tm_min < 60) ? tm->tm_min : 0;
+    int sec  = (tm->tm_sec >= 0 && tm->tm_sec < 60) ? tm->tm_sec : 0;
+    int rval = (rand() >= 0) ? (rand() % 10000) : 0;
+
+    snprintf(data, sizeof(data), "%02x%02d%02d%02d%02d%02d%02d%04d", region->region, year, mon, mday, hour, min, sec, rval);
     PlatShowMessage("Shimuke: %s (%zu)\n", data, strlen(data));
     MechaCommandAdd(MECHA_CMD_INIT_SHIMUKE, data, id++, 0, 6000, "WR INIT SHIMUKE");
     MechaCommandAdd(MECHA_TASK_UI_CMD_WAIT, NULL, MECHA_TASK_ID_UI, 0, 100, "EEPROM WAIT 100ms");

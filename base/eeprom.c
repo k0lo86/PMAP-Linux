@@ -708,3 +708,73 @@ int EEPROMCanClearOSD2InitBit(int chassis)
             return EEPROMIsOSD2InitBitTrue();
     }
 }
+
+int EEPROMReadConsoleID(u8 *ConsoleID)
+{
+    u16 word0, word1, word2, word3;
+    u16 addr0, addr1, addr2, addr3;
+
+    if (ConMD == 40)
+    {
+        addr0 = EEPROM_MAP_CON_ID_NEW_0;
+        addr1 = EEPROM_MAP_CON_ID_NEW_1;
+        addr2 = EEPROM_MAP_CON_ID_NEW_2;
+        addr3 = EEPROM_MAP_CON_ID_NEW_3;
+    }
+    else
+    {
+        addr0 = EEPROM_MAP_CON_ID_0;
+        addr1 = EEPROM_MAP_CON_ID_1;
+        addr2 = EEPROM_MAP_CON_ID_2;
+        addr3 = EEPROM_MAP_CON_ID_3;
+    }
+
+    if (EEPROMReadWord(addr0, &word0) != 0) return -1;
+    if (EEPROMReadWord(addr1, &word1) != 0) return -1;
+    if (EEPROMReadWord(addr2, &word2) != 0) return -1;
+    if (EEPROMReadWord(addr3, &word3) != 0) return -1;
+
+    ConsoleID[0] = word0 & 0xFF;
+    ConsoleID[1] = (word0 >> 8) & 0xFF;
+    ConsoleID[2] = word1 & 0xFF;
+    ConsoleID[3] = (word1 >> 8) & 0xFF;
+    ConsoleID[4] = word2 & 0xFF;
+    ConsoleID[5] = (word2 >> 8) & 0xFF;
+    ConsoleID[6] = word3 & 0xFF;
+    ConsoleID[7] = (word3 >> 8) & 0xFF;
+
+    return 0;
+}
+
+int EEPROMWriteConsoleID(const u8 *ConsoleID)
+{
+    char arg[9];
+    unsigned char id;
+
+    id = 1;
+    if (ConMD == 40)
+    {
+        snprintf(arg, 9, "%04x%02x%02x", EEPROM_MAP_CON_ID_NEW_0, ConsoleID[1], ConsoleID[0]);
+        MechaCommandAdd(MECHA_CMD_EEPROM_WRITE, arg, id++, 0, MECHA_TASK_NORMAL_TO, "CONSOLE ID WRITE");
+        snprintf(arg, 9, "%04x%02x%02x", EEPROM_MAP_CON_ID_NEW_1, ConsoleID[3], ConsoleID[2]);
+        MechaCommandAdd(MECHA_CMD_EEPROM_WRITE, arg, id++, 0, MECHA_TASK_NORMAL_TO, "CONSOLE ID WRITE");
+        snprintf(arg, 9, "%04x%02x%02x", EEPROM_MAP_CON_ID_NEW_2, ConsoleID[5], ConsoleID[4]);
+        MechaCommandAdd(MECHA_CMD_EEPROM_WRITE, arg, id++, 0, MECHA_TASK_NORMAL_TO, "CONSOLE ID WRITE");
+        snprintf(arg, 9, "%04x%02x%02x", EEPROM_MAP_CON_ID_NEW_3, ConsoleID[7], ConsoleID[6]);
+        MechaCommandAdd(MECHA_CMD_EEPROM_WRITE, arg, id++, 0, MECHA_TASK_NORMAL_TO, "CONSOLE ID WRITE");
+    }
+    else
+    {
+        snprintf(arg, 9, "%04x%02x%02x", EEPROM_MAP_CON_ID_0, ConsoleID[1], ConsoleID[0]);
+        MechaCommandAdd(MECHA_CMD_EEPROM_WRITE, arg, id++, 0, MECHA_TASK_NORMAL_TO, "CONSOLE ID WRITE");
+        snprintf(arg, 9, "%04x%02x%02x", EEPROM_MAP_CON_ID_1, ConsoleID[3], ConsoleID[2]);
+        MechaCommandAdd(MECHA_CMD_EEPROM_WRITE, arg, id++, 0, MECHA_TASK_NORMAL_TO, "CONSOLE ID WRITE");
+        snprintf(arg, 9, "%04x%02x%02x", EEPROM_MAP_CON_ID_2, ConsoleID[5], ConsoleID[4]);
+        MechaCommandAdd(MECHA_CMD_EEPROM_WRITE, arg, id++, 0, MECHA_TASK_NORMAL_TO, "CONSOLE ID WRITE");
+        snprintf(arg, 9, "%04x%02x%02x", EEPROM_MAP_CON_ID_3, ConsoleID[7], ConsoleID[6]);
+        MechaCommandAdd(MECHA_CMD_EEPROM_WRITE, arg, id++, 0, MECHA_TASK_NORMAL_TO, "CONSOLE ID WRITE");
+    }
+    MechaAddPostEEPROMWrCmds(id);
+
+    return MechaCommandExecuteList(NULL, NULL);
+}

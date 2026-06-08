@@ -10,6 +10,10 @@
 #include "eeprom.h"
 #include "updates.h"
 
+#ifndef ID_MANAGEMENT
+#define ID_MANAGEMENT
+#endif
+
 static int DumpEEPROM(const char *filename)
 {
     FILE *dump;
@@ -470,7 +474,86 @@ void MenuEEPROM(void)
                 break;
             case 14:
 #ifdef ID_MANAGEMENT
-                PlatShowMessage("Defaults (ID) load: %s.\n", EEPROMDefaultID() == 0 ? "completed" : "failed");
+                if (EEPROMDefaultID() == 0)
+                {
+                    char choice;
+                    PlatShowMessage("Defaults (ID) load: completed.\n");
+                    do
+                    {
+                        PlatShowMessage("Do you want to enter a new Serial number and Model ID? (y/n): ");
+                        choice = getchar();
+                        while (getchar() != '\n')
+                        {
+                        };
+                    } while (choice != 'y' && choice != 'n' && choice != 'Y' && choice != 'N');
+
+                    if (choice == 'y' || choice == 'Y')
+                    {
+                        u32 serial = 0;
+                        unsigned int model_id = 0xFFFF;
+                        unsigned int emcs = 0;
+                        u8 ConsoleID[8];
+
+                        if (EEPROMReadConsoleID(ConsoleID) == 0)
+                        {
+                            PlatShowMessage("Enter new Serial number (up to 7 digits, e.g. 9404897): ");
+                            if (scanf("%u", &serial) <= 0)
+                            {
+                            }
+                            while (getchar() != '\n')
+                            {
+                            };
+
+                            PlatShowMessage("Enter new Model ID (4-digit hex, e.g. d20c): ");
+                            if (scanf("%x", &model_id) <= 0)
+                            {
+                            }
+                            while (getchar() != '\n')
+                            {
+                            };
+
+                            PlatShowMessage("Enter EMCS ID (2-digit hex/decimal, e.g. 00): ");
+                            if (scanf("%i", &emcs) <= 0)
+                            {
+                            }
+                            while (getchar() != '\n')
+                            {
+                            };
+
+                            if (serial <= 0xFFFFFF && model_id <= 0xFFFF && emcs <= 0xFF)
+                            {
+                                ConsoleID[0] = model_id & 0xFF;
+                                ConsoleID[1] = (model_id >> 8) & 0xFF;
+                                ConsoleID[4] = serial & 0xFF;
+                                ConsoleID[5] = (serial >> 8) & 0xFF;
+                                ConsoleID[6] = (serial >> 16) & 0xFF;
+                                ConsoleID[7] = emcs & 0xFF;
+
+                                if (EEPROMWriteConsoleID(ConsoleID) == 0)
+                                {
+                                    PlatShowMessage("Console ID update completed.\n");
+                                    MechaInitModel();
+                                }
+                                else
+                                {
+                                    PlatShowMessage("Console ID update failed.\n");
+                                }
+                            }
+                            else
+                            {
+                                PlatShowMessage("Invalid input range. Operation aborted.\n");
+                            }
+                        }
+                        else
+                        {
+                            PlatShowMessage("Failed to read ID fields from EEPROM.\n");
+                        }
+                    }
+                }
+                else
+                {
+                    PlatShowMessage("Defaults (ID) load: failed.\n");
+                }
 #else
                 PlatShowMessage("Function disabled.\n");
 #endif
